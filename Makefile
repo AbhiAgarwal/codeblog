@@ -1,6 +1,6 @@
 all:
 	git submodule foreach git pull origin master
 build:
-	hugo --theme=cocoa
+	hugo --theme=abhicode
 server:
-	hugo server --theme=cocoa --buildDrafts --watch
+	hugo server --theme=abhicode --buildDrafts --watch

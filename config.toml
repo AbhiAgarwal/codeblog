@@ -2,3 +2,5 @@ baseurl = "http://abhiagarwal.github.io/"
 languageCode = "en-us"
 title = "abhicodes"
 pygmentsUseClasses = true
+author = "Abhi Agarwal"
+
