@@ -24,7 +24,7 @@ There’s also costs associated with CI platforms:
 
 *   It’s expensive if you want parallelism or any type of extra features.
 
-It’s incredible simple to get started with a CI platform as well! CircleCI is one I love using because it’s easy to get started + they allow developers to use private repositories (rather than TravisCI where you have to pay for a private repository). 
+It’s incredibly simple to get started with a CI platform as well! CircleCI is one I love using because it’s easy to get started + they allow developers to use private repositories (rather than TravisCI where you have to pay for a private repository). 
 
 To get started you can go on [circleci.com](http://circleci.com) and login through your Github (or Bitbucket, etc). Then you can just add the repositories you want to add CircleCI to by visiting the “Add Projects” section. Now your repository to be built automatically when you push any new commits to it on Github. Before you start pushing code - you’ve to do one final thing. You’ve to add a file called circle.yml. This file tells CircleCI what it’s supposed to do when you push to the master branch of your repository.
 
