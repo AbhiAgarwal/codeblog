@@ -7,6 +7,8 @@ title = "Prototyping using Django"
 
 I am writing a series on how to prototype and release a product very fast using just a few tools! This is a three-part tutorial. The first part will be writing an API in Django. The second part will be writing an iOS app using React-native, and the last part will be writing a web app in Angular.JS. These three tools will allow you to prototype and push something out the door very quickly!
 
+----------
+
 Lets get started with writing our API in Django! All you need to know for now is that “Django is a high-level Python Web framework”. If you’re not sure what a web framework is or haven’t built an API in the past then just follow along, and hopefully you’ll get the gist of it!
 
 In this tutorial we’ll be using Python 2.7.10. We're going to be making an app to show a list of events that are happening. Firstly, lets setup a [virtual environment](http://docs.python-guide.org/en/latest/dev/virtualenvs)! Specifically we’ll be using [virtualenvwrapper](http://virtualenvwrapper.readthedocs.org/en/latest/index.html). This allows you to easily switch between virtual environments. If you’ve already setup virtual environments - feel free to use your own and skip this part.
@@ -25,9 +27,9 @@ export WORKON_HOME=$HOME/.virtualenvs
 source /usr/local/bin/virtualenvwrapper.sh
 ```
 
-Now that you have `virtualenvwrapper` installed, you can create a virtual environment by running `mkvirtualenv eventsapp`. `eventsapp` is just the name of the virtual environment - feel free to call it your project name.
+Now that you have `virtualenvwrapper` installed, you can create a virtual environment by running `mkvirtualenv <project_name>`. We're going to be calling our project `today`. This is just the name of your product. Substitute it with whatever you want! `todayapp` is just the name of the virtual environment - feel free to call it your project name. So go ahead and run `mkvirtualenv todayapp`.
 
-After you create this virtual environment you should be inside it! You should see something like this: `(eventsapp)abhiagarwal at Abhis-MacBook-Pro in ~` in your Terminal window. The first part just lets you know which virtual environment you are in. To leave the virtual environment just do `deactivate`, and to go into a virtual environment run `workon eventsapp`.
+After you create this virtual environment you should be inside it! You should see something like this: `(todayapp)abhiagarwal at Abhis-MacBook-Pro in ~` in your Terminal window. The first part just lets you know which virtual environment you are in. To leave the virtual environment just do `deactivate`, and to go into a virtual environment run `workon todayapp`.
 
 This is great! Now you have a virtual environment setup. We can start building our Django API! Let's start the Django development! First you'll need to install django in your virtual environment. So stay in the virtual environment you're in, and run `pip install Django==1.9`. This should install Django with the version 1.9. We'll stick with version 1.9 since it's the newest version (at the time this post was written). If you want to look at all the Python packages that are available in your virtual environment you can do a `pip freeze`. Right now when you do run `pip freeze` you should see:
 
@@ -36,13 +38,13 @@ Django==1.9
 wheel==0.24.0
 ```
 
-This should have installed a command in your environment called `django-admin`. We're going to be calling our project `today`. This is just the name of your product. Substitute it with whatever you want! We'll put our API in a folder called `today-api`. So go ahead and do `mkdir today-api`, and `cd today-api`. The location of where this is on your computer is not too important as this point.
+This should have installed a command in your environment called `django-admin`. We'll put our API in a folder called `today-api`. So go ahead and do `mkdir today-api`, and `cd today-api`. The location of where this is on your computer is not too important as this point.
 
 To start a new Django project you can run `django-admin startproject today`. This will create a directory called today in the folder. At this point you should see the following structure:
 
 ```
 .
-├── events-api
+├── today-api
     └── today
         ├── manage.py
         └── today
@@ -86,7 +88,7 @@ Now your directory structure should look like this:
 
 ```
 .
-├── events-api
+├── today-api
     └── today
         ├── db.sqlite3
         ├── manage.py
@@ -117,7 +119,7 @@ class Event(models.Model):
         return self.name
 ```
 
-We initially have two fields in our model. The first one is called `name`, and the second one is called `description`, and the third one is called `date`. The name and description field are of type `TextField`. Django comes with "batteries installed", which means that it provides us with a lot of things we can just start using. The date field is of type `DateTimeField`. We can pass in certain parameters into these fields. In the name field we pass in:
+We initially have three fields in our model. The first one is called `name`, and the second one is called `description`, and the third one is called `date`. The name and description field are of type `TextField`. Django comes with "batteries installed", which means that it provides us with a lot of things we can just start using. The date field is of type `DateTimeField`. We can pass in certain parameters into these fields. In the name field we pass in:
 
 - `blank=False` -- which means that it can't be blank -- it's not an optional field
 - `max_length=100` -- the name of the event can be at most 100 characters.
@@ -130,7 +132,22 @@ Here we've setup a basic model for a single event. Each event must have a name, 
 
 `image = models.URLField(blank=True, max_length=500)`
 
-This uses the `URLField` that is built into Django. This is different from `TextField` because it internally validates and makes sure the URL is of correct format when you add it. Here we use `blank=True`, which means that image is an optional field. When we're adding a new event we might not have an image for it -- the optional part makes it so we don't have too.
+This uses the `URLField` that is built into Django. This is different from `TextField` because it internally validates and makes sure the URL is of correct format when you add it. Here we use `blank=True`, which means that image is an optional field. When we're adding a new event we might not have an image for it -- the optional part makes it so we don't have too. The final product should look like this:
+
+```python
+# -*- coding: utf-8 -*-
+from django.db import models
+
+
+class Event(models.Model):
+    name = models.TextField(blank=False, max_length=100)
+    description = models.TextField(blank=False, max_length=1000)
+    date = models.DateTimeField(blank=False, null=False)
+    image = models.URLField(blank=True, max_length=500)
+
+    def __unicode__(self):
+        return self.name
+```
 
 Great! So we've added our basic model. Now, add a file called `admin.py` by doing `touch admin.py`. Django comes built in with an admin interface where you're able to see all the data in your models. This file tells Django to add your model to the admin interface. In this file you should go ahead and just add:
 
@@ -147,7 +164,7 @@ Now that we've added our models, and admin files we will begin to start building
 
 `pip install djangorestframework==3.3.2`
 
-At this point we should create a `requirements.txt` file. This will allow you to track the Python packages you've installed. Go back to the base `events-api` folder. Then run `touch requirements.txt`. Now you're able to use `pip freeze`, and put the output into requirements.txt. To do this just execute the command `pip freeze > requirements.txt`. This should put your current Python packages into the file. To view the file you can just run `cat requirements.txt` in your Terminal. You should see:
+At this point we should create a `requirements.txt` file. This will allow you to track the Python packages you've installed. Go back to the base `today-api` folder. Then run `touch requirements.txt`. Now you're able to use `pip freeze`, and put the output into requirements.txt. To do this just execute the command `pip freeze > requirements.txt`. This should put your current Python packages into the file. To view the file you can just run `cat requirements.txt` in your Terminal. You should see:
 
 ```
 Django==1.9
