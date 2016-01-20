@@ -1,6 +1,6 @@
 +++
 date = "2016-01-20T14:19:00+07:00"
-draft = true
+draft = false
 title = "Prototyping using Django"
 
 +++
@@ -147,7 +147,7 @@ We initially have three fields in our model. The first one is called `name`, and
 
 In the date field we pass in:
 
-- `null=False` --
+- `null=False` -- Will not set the value to be NULL in your database. "Blank values for Django field types such as DateTimeField or ForeignKey will be stored as NULL in the DB" ([ref](http://stackoverflow.com/questions/8609192/differentiate-null-true-blank-true-in-django)).
 
 Here we've setup a basic model for a single event. Each event must have a name, a description, and a date. We should also go ahead and add an `image` field. An event could have an image! Underneath date you should add:
 
@@ -256,6 +256,8 @@ This means that we've successfully taken our schema and added these fields into 
 
 ## Writing our first ViewSet
 
+A ViewSet in Django Rest Framework is defined as "Django REST framework allows you to combine the logic for a set of related views in a single class, called a ViewSet. In other frameworks you may also find conceptually similar implementations named something like 'Resources' or 'Controllers'" ([ref](http://www.django-rest-framework.org/api-guide/viewsets/)).
+
 Let's go back into our events app. Just `cd` into it. Here create a file called `views.py`. This is the file that is incharge of handling what happens when something tries to reach your events endpoint. Here you should put:
 
 ```python
@@ -279,7 +281,7 @@ class EventsViewSet(viewsets.ModelViewSet):
 
 This is a ViewSet. Basically when a request comes it -- it calls `get_queryset` to get a `queryset`, which is what it has to return. A queryset can just be seen as an array of instances of the `Event` model. When you do `/events` you want it to return all the events, but when you do `/events/1` you want it to return the event of `id` 1. In Django this `id` is called `pk` or primary key. So we're checking to see if `uid` is not None, and if it is not we want to filter the queryset and return the event with that ID.
 
-Now we have to write a Serializer.
+Now we have to write a Serializer. A Serializer in Django Rest Framework is defined as "Serializers allow complex data such as querysets and model instances to be converted to native Python datatypes that can then be easily rendered into JSON, XML or other content types. Serializers also provide deserialization, allowing parsed data to be converted back into complex types, after first validating the incoming data" ([ref](http://www.django-rest-framework.org/api-guide/serializers/)).
 
 ```python
 # -*- coding: utf-8 -*-
