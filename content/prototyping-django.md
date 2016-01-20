@@ -447,6 +447,8 @@ Your finally directory structure would be:
             └── wsgi.py
 ```
 
+The final project is on Github [here](https://github.com/AbhiAgarwal/prototyping-django).
+
 In the next Prototyping tutorial, we will go through how to hook up this REST API made using Django with a React Native iOS app!
 
 ## Sources
