@@ -49,3 +49,26 @@ Great! So we'll be concentrating on the iOS part of this message. I'll be doing 
 cd ios
 open today_app.xcodeproj
 ```
+
+Then when Xcode opens up click the play button on the top left. This should open up the iOS "Simulator", and a Terminal window. When the simulator opens up you should see the app say "Welcome to React Native!". This is the default screen that comes with the default react-native `index.ios.js` file. Go back a directory by doing `cd ..`, and open up `index.ios.js`. We need to install some packages:
+
+```bash
+npm install react-redux --save
+npm install react-router --save
+npm install redux --save
+npm install redux-simple-router --save
+npm install redux-thunk --save
+```
+
+Your dependencies in `package.json` should look something like this:
+
+```json
+"dependencies": {
+  "react-native": "^0.18.1",
+  "react-redux": "^4.0.6",
+  "react-router": "^1.0.3",
+  "redux": "^3.0.5",
+  "redux-simple-router": "^2.0.4",
+  "redux-thunk": "^1.0.3"
+}
+```
